@@ -3,19 +3,21 @@
 import { useMemo } from "react";
 
 type Props = {
-  srcs: string[];        // /public/patterns strips
-  height?: number;       // height of the tape
-  opacity?: number;      // transparency
-  index?: number;        // which strip to use
-  className?: string;    // extra styling
+  srcs: string[];      // /public/news/*.png
+  height?: number;     // tape height
+  opacity?: number;    // transparency
+  index?: number;      // which strip to use
+  className?: string;  // extra classes
+  speed?: number;      // relative speed
 };
 
 export default function NewspaperTape({
   srcs,
-  height = 80,
-  opacity = 0.85,
+  height = 56,
+  opacity = 0.6,
   index = 0,
   className = "",
+  speed = 30,
 }: Props) {
   const src = useMemo(
     () => srcs[Math.max(0, Math.min(index, srcs.length - 1))],
@@ -25,25 +27,42 @@ export default function NewspaperTape({
   return (
     <div
       aria-hidden
-      className={`relative w-full ${className}`}
+      className={`relative overflow-hidden w-full ${className}`}
       style={{
         height,
-        backgroundImage: `url(${src})`,
-        backgroundRepeat: "repeat-x",
-        backgroundSize: "auto 100%",
-        backgroundPosition: "center",
+        filter: "grayscale(100%) contrast(1.05) brightness(1.05)",
         opacity,
-        filter: "grayscale(100%) contrast(1.1)",
       }}
     >
-      {/* subtle shadow below strip */}
+      {/* scrolling tape via background-position */}
       <div
-        className="absolute inset-x-0 bottom-0 h-6"
+        className="absolute inset-0"
         style={{
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0))",
+          backgroundImage: `url(${src})`,
+          backgroundRepeat: "repeat-x",
+          backgroundSize: "auto 100%",
+          backgroundPosition: "0 50%",
+          animation: `scrollTape ${500 / speed}s linear infinite`,
         }}
       />
+
+      {/* very soft shadow under the strip */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-4"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.06), rgba(0,0,0,0))",
+        }}
+      />
+
+      <style>
+        {`
+          @keyframes scrollTape {
+            0%   { background-position-x: 0; }
+            100% { background-position-x: -100%; }
+          }
+        `}
+      </style>
     </div>
   );
 }
