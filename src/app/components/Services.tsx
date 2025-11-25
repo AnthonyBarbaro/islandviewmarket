@@ -139,18 +139,18 @@ export default function Services() {
 
   const MobileCard = ({ item }: { item: Service }) => (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <figure className="relative mx-auto h-28 w-28 sm:h-32 sm:w-32 rounded-xl overflow-hidden bg-tile ring-2 ring-gold ring-offset-2 ring-offset-white shadow">
+      <figure className="relative mx-auto h-28 w-28 sm:h-32 sm:w-32 rounded-xl overflow-hidden bg-tile ring-2 ring-black ring-offset-2 ring-offset-white shadow grayscale">
         <Image
           src={item.image}
           alt={item.alt || item.title}
           fill
           sizes="128px"
-          className="object-contain select-none"
+          className="object-contain select-none "
           loading="lazy"
           draggable={false}
         />
       </figure>
-      <h3 className="mt-4 text-center text-gold font-extrabold text-base leading-snug">
+      <h3 className="mt-4 text-center text-black font-extrabold text-base leading-snug">
         {item.title}
       </h3>
       <p className="mt-1 text-center text-slate-700 text-sm leading-relaxed">
@@ -167,13 +167,13 @@ export default function Services() {
           alt={item.alt || item.title}
           fill
           sizes="100px"
-          className="object-contain transition-transform duration-200 ease-out group-hover:scale-105 motion-reduce:transform-none select-none"
+          className="object-contain transition-transform duration-200 ease-out group-hover:scale-105 motion-reduce:transform-none select-none "
           loading="lazy"
           draggable={false}
         />
       </figure>
       <div className="min-w-0">
-        <h3 className="text-gold font-extrabold text-base md:text-lg leading-tight">
+        <h3 className="text-black font-extrabold text-base md:text-lg leading-tight">
           {item.title}
         </h3>
         <p className="mt-1 text-slate-700 text-sm leading-snug">{item.desc}</p>
@@ -185,7 +185,7 @@ export default function Services() {
     <section id="services" className="py-14 md:py-16 bg-white">
       {/* HEADER: tape as background, text over it (now on mobile too) */}
       <div className="relative mb-8">
-        <div className="relative h-24 sm:h-28 md:h-32 overflow-hidden">
+        <div className="relative h-24 sm:h-28 md:h-32 overflow-hidden ">
           {/* tape fills the header area on all breakpoints */}
           <NewspaperTape
             srcs={STRIPS}
@@ -231,7 +231,7 @@ export default function Services() {
                 ref={(el) => {
                   slideRefs.current[i] = el;
                 }}
-                className="snap-start shrink-0 w-[88%]"
+                className="snap-start shrink-0 w-[88%] "
                 aria-roledescription="slide"
                 aria-label={`${i + 1} of ${items.length}`}
               >
@@ -267,7 +267,7 @@ export default function Services() {
                 onClick={() => goTo(i)}
                 className={`h-2.5 rounded-full border transition-all ${
                   index === i
-                    ? "w-6 bg-[color:var(--color-gold)] border-[color:var(--color-gold)]"
+                    ? "w-6 bg-[color:var(--color-black)] border-[color:var(--color-black)]"
                     : "w-2.5 bg-white border-black"
                 }`}
               />
@@ -276,7 +276,7 @@ export default function Services() {
         </div>
 
         {/* TABLET/DESKTOP: clean grid with row cards */}
-        <ul className="hidden md:grid grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
+        <ul className="hidden md:grid grid-cols-2 xl:grid-cols-2 gap-5 md:gap-8 grayscale-100">
           {items.map((item) => (
             <li key={item.title}>
               <RowCard item={item} />

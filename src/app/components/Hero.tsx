@@ -24,7 +24,7 @@ export default function Hero() {
               <span className="inline-flex items-center rounded-full bg-[#E1060010] border border-[#E1060033] px-3 py-1 text-[#E10600] font-semibold">
                 EBT Accepted
               </span>
-              <span className="inline-flex items-center rounded-full bg-[#234A5A] px-3 py-1 text-[#F4D890] font-semibold">
+              <span className="inline-flex items-center rounded-full bg-[#000000] px-3 py-1 text-[#ffffff] font-semibold">
                 Cold Beer &amp; Top‑Shelf Spirits
               </span>
             </div>
@@ -53,13 +53,13 @@ export default function Hero() {
       max-w-md 
       rounded-2xl 
       p-6 
-      bg-gradient-to-br from-[#234A5A] via-[#1F3E4A] to-[#1A3440]
+      bg-gradient-to-br from-[#000000] via-[#000000] to-[#E10600]
       text-white
       border border-[#2E5260]/30
       shadow-sm
   ">
     <div>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#F4D890]/70">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#ffffff]/90">
         Neighborhood Liquor &amp; Market
       </p>
 
@@ -73,29 +73,29 @@ export default function Hero() {
       </p>
     </div>
 
-    <ul className="mt-5 grid gap-2 text-sm text-[#F4D890]">
+    <ul className="mt-5 grid gap-2 text-sm text-[#ffffff]">
       <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-[#F4D890]" />
+        <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
         <span>Open daily — see hours below</span>
       </li>
 
       <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-[#F4D890]" />
+        <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
         <span>Corporate orders &amp; custom engravings</span>
       </li>
 
       <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-[#F4D890]" />
+        <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
         <span>Fresh food, local products &amp; daily specials</span>
       </li>
 
       <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-[#F4D890]" />
+        <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
         <span>EBT accepted (eligible items)</span>
       </li>
     </ul>
 
-    <p className="mt-4 text-[11px] text-[#E6EDF5]/70">
+    <p className="mt-4 text-[11px] text-[#ffffff]/70">
       21+ only. Valid ID required. Please drink responsibly.
     </p>
   </div>
