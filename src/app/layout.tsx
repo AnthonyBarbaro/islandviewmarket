@@ -50,7 +50,7 @@ export const metadata = {
       "Your neighborhood stop for spirits, cold beer, groceries, fresh food, and essentials.",
     images: [
       {
-        url: "/logo1.jpeg",
+        url: "http://islandview.s3-website-us-east-1.amazonaws.com/logo1.jpeg",
         width: 1200,
         height: 630,
         alt: "Island View Market & Liquor",
