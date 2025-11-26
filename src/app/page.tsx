@@ -1,7 +1,7 @@
 import Hero from "./components/Hero";
 import Services from "./components/Services";
 import Brands from "./components/Brands";
-import NewspaperTape from "@/app/components/NewspaperTape";
+import ContactSection from "./components/ContactSection";
 
 const STRIPS = [
   "/news/1.png",
@@ -15,8 +15,8 @@ export default function Home() {
     <>
       <Hero />
       <Services />
-
       <Brands />
+      <ContactSection/>
     </>
   );
 }
