@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import NewspaperTape from "@/app/components/NewspaperTape";
 
 // newspaper strips for the header tape
@@ -26,18 +26,75 @@ const brands = [
 ];
 
 export default function Brands() {
-  // simple ref so arrows can scroll the list on mobile
+  // Mobile carousel refs/state
   const scrollerRef = useRef<HTMLUListElement | null>(null);
+  const logoRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const scroll = (direction: "left" | "right") => {
+  // Center the first slide on initial render
+  useEffect(() => {
+    const el = scrollerRef.current;
+    const first = logoRefs.current[0];
+    if (!el || !first) return;
+
+    const containerWidth = el.clientWidth;
+    const itemWidth = first.clientWidth;
+    const left = Math.max(
+      0,
+      first.offsetLeft - (containerWidth - itemWidth) / 2
+    );
+
+    el.scrollTo({ left, behavior: "auto" });
+    setCurrentIndex(0);
+  }, []);
+
+  // Helper to smoothly center a slide by index
+  const scrollToIndex = (index: number) => {
+    const el = scrollerRef.current;
+    const item = logoRefs.current[index];
+    if (!el || !item) return;
+
+    const containerWidth = el.clientWidth;
+    const itemWidth = item.clientWidth;
+    const left = Math.max(
+      0,
+      item.offsetLeft - (containerWidth - itemWidth) / 2
+    );
+
+    el.scrollTo({ left, behavior: "smooth" });
+    setCurrentIndex(index);
+  };
+
+  const handlePrev = () => {
+    if (currentIndex <= 0) return;
+    scrollToIndex(currentIndex - 1);
+  };
+
+  const handleNext = () => {
+    if (currentIndex >= brands.length - 1) return;
+    scrollToIndex(currentIndex + 1);
+  };
+
+  // When user swipes manually, update currentIndex so arrows hide/show correctly
+  const handleScroll = () => {
     const el = scrollerRef.current;
     if (!el) return;
 
-    const amount = el.clientWidth * 0.8; // roughly one card at a time
-    el.scrollBy({
-      left: direction === "left" ? -amount : amount,
-      behavior: "smooth",
+    const scrollCenter = el.scrollLeft + el.clientWidth / 2;
+    let nearestIndex = 0;
+    let nearestDist = Number.POSITIVE_INFINITY;
+
+    logoRefs.current.forEach((item, i) => {
+      if (!item) return;
+      const itemCenter = item.offsetLeft + item.clientWidth / 2;
+      const dist = Math.abs(itemCenter - scrollCenter);
+      if (dist < nearestDist) {
+        nearestDist = dist;
+        nearestIndex = i;
+      }
     });
+
+    setCurrentIndex(nearestIndex);
   };
 
   return (
@@ -45,7 +102,6 @@ export default function Brands() {
       {/* HEADER: tape behind, text over it */}
       <div className="relative mb-8">
         <div className="relative h-24 sm:h-28 md:h-32 overflow-hidden">
-          {/* tape fills header area on all breakpoints */}
           <NewspaperTape
             srcs={STRIPS}
             index={2}
@@ -54,7 +110,6 @@ export default function Brands() {
             className="absolute inset-0"
           />
 
-          {/* centered heading over tape */}
           <div className="absolute inset-0 flex items-center">
             <div className="container">
               <div className="text-center">
@@ -69,10 +124,11 @@ export default function Brands() {
 
       {/* CONTENT */}
       <div className="container">
-        {/* MOBILE: manual swipe carousel with subtle arrows */}
+        {/* MOBILE: swipeable carousel with context arrows */}
         <div className="relative md:hidden">
           <ul
             ref={scrollerRef}
+            onScroll={handleScroll}
             className="
               flex gap-4 overflow-x-auto
               snap-x snap-mandatory scroll-smooth no-scrollbar
@@ -82,13 +138,16 @@ export default function Brands() {
             aria-roledescription="carousel"
             aria-label="Brand logos carousel"
           >
-            {brands.map((brand) => (
+            {brands.map((brand, i) => (
               <li
                 key={brand.name}
+                ref={(el) => {
+                  logoRefs.current[i] = el;
+                }}
                 className="
                   snap-center
                   shrink-0
-                  w-[90%]          /* fills more of the mobile width */
+                  w-[90%]
                   mx-auto
                 "
               >
@@ -97,34 +156,40 @@ export default function Brands() {
             ))}
           </ul>
 
-          {/* small left/right hints that also scroll */}
-          <button
-            type="button"
-            onClick={() => scroll("left")}
-            aria-label="Scroll brands left"
-            className="
-              absolute left-2 top-1/2 -translate-y-1/2
-              rounded-full bg-black/80 text-white
-              text-xs px-2 py-1 shadow
-            "
-          >
-            ‹
-          </button>
-          <button
-            type="button"
-            onClick={() => scroll("right")}
-            aria-label="Scroll brands right"
-            className="
-              absolute right-2 top-1/2 -translate-y-1/2
-              rounded-full bg-black/80 text-white
-              text-xs px-2 py-1 shadow
-            "
-          >
-            ›
-          </button>
+          {/* Left arrow — hidden on first brand */}
+          {currentIndex > 0 && (
+            <button
+              type="button"
+              onClick={handlePrev}
+              aria-label="Scroll brands left"
+              className="
+                absolute left-2 top-1/2 -translate-y-1/2
+                rounded-full bg-black/80 text-white
+                text-xs px-2 py-1 shadow
+              "
+            >
+              ‹
+            </button>
+          )}
+
+          {/* Right arrow — hidden on last brand */}
+          {currentIndex < brands.length - 1 && (
+            <button
+              type="button"
+              onClick={handleNext}
+              aria-label="Scroll brands right"
+              className="
+                absolute right-2 top-1/2 -translate-y-1/2
+                rounded-full bg-black/80 text-white
+                text-xs px-2 py-1 shadow
+              "
+            >
+              ›
+            </button>
+          )}
         </div>
 
-        {/* DESKTOP GRID – unchanged */}
+        {/* DESKTOP GRID */}
         <div className="hidden md:grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
           {brands.map((brand) => (
             <BrandTile key={brand.name} name={brand.name} image={brand.image} />
@@ -158,7 +223,13 @@ function BrandTile({ name, image }: { name: string; image: string }) {
           alt={name}
           fill
           sizes="140px"
-          className="object-contain select-none"
+          className="
+            object-contain select-none
+            grayscale               /* base grayscale */
+            group-hover:grayscale-0 /* optional: color on hover */
+            transition
+            duration-200
+          "
           draggable={false}
         />
       </div>

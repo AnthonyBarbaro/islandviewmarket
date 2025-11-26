@@ -67,6 +67,20 @@ export default function Services() {
   const indexRef = useRef(0);
   const interactingRef = useRef(false);
 
+  // helper to get the scroll position that centers a given slide
+  const getSlideLeft = (i: number) => {
+    const el = scrollerRef.current;
+    const slide = slideRefs.current[i];
+    if (!el || !slide) return 0;
+
+    const containerWidth = el.clientWidth;
+    const itemWidth = slide.clientWidth;
+    const left =
+      slide.offsetLeft - (containerWidth - itemWidth) / 2;
+
+    return Math.max(0, left);
+  };
+
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
@@ -74,9 +88,12 @@ export default function Services() {
     const reduced =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const desktopMQ = window.matchMedia("(min-width: 768px)");
+    const desktopMQ =
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 768px)");
 
-    const getPos = (i: number) => slideRefs.current[i]?.offsetLeft ?? 0;
+    // center the first slide on mount
+    el.scrollTo({ left: getSlideLeft(0), behavior: "auto" });
 
     const onScroll = () => {
       const left = el.scrollLeft;
@@ -84,7 +101,9 @@ export default function Services() {
       let best = Number.POSITIVE_INFINITY;
       slideRefs.current.forEach((s, i) => {
         if (!s) return;
-        const d = Math.abs(s.offsetLeft - left);
+        const slideCenter = s.offsetLeft + s.clientWidth / 2;
+        const viewportCenter = left + el.clientWidth / 2;
+        const d = Math.abs(slideCenter - viewportCenter);
         if (d < best) {
           best = d;
           nearest = i;
@@ -102,7 +121,7 @@ export default function Services() {
       timer = setInterval(() => {
         if (interactingRef.current) return;
         const next = (indexRef.current + 1) % items.length;
-        el.scrollTo({ left: getPos(next), behavior: "smooth" });
+        el.scrollTo({ left: getSlideLeft(next), behavior: "smooth" });
         setIndex(next);
         indexRef.current = next;
       }, AUTOPLAY_MS);
@@ -124,18 +143,26 @@ export default function Services() {
       el.removeEventListener("scroll", onScroll);
       desktopMQ.removeEventListener?.("change", onMQ);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length]);
 
   const goTo = (i: number) => {
     const el = scrollerRef.current;
     if (!el) return;
-    const left = slideRefs.current[i]?.offsetLeft ?? 0;
-    el.scrollTo({ left, behavior: "smooth" });
+    el.scrollTo({ left: getSlideLeft(i), behavior: "smooth" });
     setIndex(i);
     indexRef.current = i;
   };
-  const prev = () => goTo((index - 1 + items.length) % items.length);
-  const next = () => goTo((index + 1) % items.length);
+
+  const prev = () => {
+    if (index <= 0) return;
+    goTo(index - 1);
+  };
+
+  const next = () => {
+    if (index >= items.length - 1) return;
+    goTo(index + 1);
+  };
 
   const MobileCard = ({ item }: { item: Service }) => (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -145,7 +172,7 @@ export default function Services() {
           alt={item.alt || item.title}
           fill
           sizes="128px"
-          className="object-contain select-none "
+          className="object-contain select-none"
           loading="lazy"
           draggable={false}
         />
@@ -161,13 +188,13 @@ export default function Services() {
 
   const RowCard = ({ item }: { item: Service }) => (
     <div className="group flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
-      <figure className="relative h-16 w-16 md:h-20 md:w-20 rounded-xl overflow-hidden bg-tile ring-2 ring-gold ring-offset-2 ring-offset-white shadow shrink-0">
+      <figure className="relative h-16 w-16 md:h-20 md:w-20 rounded-xl overflow-hidden bg-tile ring-2 ring-gold ring-offset-2 ring-offset-white shadow shrink-0 grayscale">
         <Image
           src={item.image}
           alt={item.alt || item.title}
           fill
           sizes="100px"
-          className="object-contain transition-transform duration-200 ease-out group-hover:scale-105 motion-reduce:transform-none select-none "
+          className="object-contain transition-transform duration-200 ease-out group-hover:scale-105 motion-reduce:transform-none select-none"
           loading="lazy"
           draggable={false}
         />
@@ -185,8 +212,7 @@ export default function Services() {
     <section id="services" className="py-14 md:py-16 bg-white">
       {/* HEADER: tape as background, text over it (now on mobile too) */}
       <div className="relative mb-8">
-        <div className="relative h-24 sm:h-28 md:h-32 overflow-hidden ">
-          {/* tape fills the header area on all breakpoints */}
+        <div className="relative h-24 sm:h-28 md:h-32 overflow-hidden">
           <NewspaperTape
             srcs={STRIPS}
             index={1}
@@ -195,15 +221,13 @@ export default function Services() {
             className="absolute inset-0"
           />
 
-          {/* text centered over tape */}
           <div className="absolute inset-0 flex items-center">
             <div className="container">
               <div className="text-center">
                 <h2 className="inline-block px-4 py-1 rounded-md bg-white/90 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">
                   Services &amp; Store Highlights
                 </h2>
-                <p className="text-xs sm:text-sm md:text-base text-slate-700">
-</p>
+                <p className="text-xs sm:text-sm md:text-base text-slate-700" />
               </div>
             </div>
           </div>
@@ -231,7 +255,7 @@ export default function Services() {
                 ref={(el) => {
                   slideRefs.current[i] = el;
                 }}
-                className="snap-start shrink-0 w-[88%] "
+                className="snap-center shrink-0 w-[88%] mx-auto"
                 aria-roledescription="slide"
                 aria-label={`${i + 1} of ${items.length}`}
               >
@@ -240,23 +264,27 @@ export default function Services() {
             ))}
           </ul>
 
-          {/* arrows */}
-          <button
-            type="button"
-            onClick={prev}
-            aria-label="Previous service"
-            className="absolute left-1 top-1/2 -translate-y-1/2 rounded-full bg-black text-white px-3 py-1.5 shadow"
-          >
-            ‹
-          </button>
-          <button
-            type="button"
-            onClick={next}
-            aria-label="Next service"
-            className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full bg-black text-white px-3 py-1.5 shadow"
-          >
-            ›
-          </button>
+          {/* arrows – match Brands behavior */}
+          {index > 0 && (
+            <button
+              type="button"
+              onClick={prev}
+              aria-label="Previous service"
+              className="absolute left-1 top-1/2 -translate-y-1/2 rounded-full bg-black text-white px-3 py-1.5 shadow"
+            >
+              ‹
+            </button>
+          )}
+          {index < items.length - 1 && (
+            <button
+              type="button"
+              onClick={next}
+              aria-label="Next service"
+              className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full bg-black text-white px-3 py-1.5 shadow"
+            >
+              ›
+            </button>
+          )}
 
           {/* dots */}
           <div className="mt-3 flex justify-center gap-2">
@@ -276,7 +304,7 @@ export default function Services() {
         </div>
 
         {/* TABLET/DESKTOP: clean grid with row cards */}
-        <ul className="hidden md:grid grid-cols-2 xl:grid-cols-2 gap-5 md:gap-8 grayscale-100">
+        <ul className="hidden md:grid grid-cols-2 xl:grid-cols-2 gap-5 md:gap-8">
           {items.map((item) => (
             <li key={item.title}>
               <RowCard item={item} />

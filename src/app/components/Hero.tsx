@@ -46,60 +46,60 @@ export default function Hero() {
             </div>
           </div>
   
+
           {/* RIGHT: Smaller teal+gold highlight card (matches Services) */}
-{/* RIGHT: Seamless hero block that matches banner */}
-<div className="hidden md:flex justify-end">
-  <div className="
-      max-w-md 
-      rounded-2xl 
-      p-6 
-      bg-gradient-to-br from-[#000000] via-[#000000] to-[#E10600]
-      text-white
-      border border-[#2E5260]/30
-      shadow-sm
-  ">
-    <div>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#ffffff]/90">
-        Neighborhood Liquor &amp; Market
-      </p>
+          <div className="hidden md:flex justify-end">
+          <div className="
+              max-w-md 
+              rounded-2xl 
+              p-6 
+              bg-gradient-to-br from-[#000000] via-[#000000] to-[#000000]
+              text-white
+              border border-[#2E5260]/30
+              shadow-sm
+          ">
+              <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#ffffff]/90">
+                  Neighborhood Liquor &amp; Market
+              </p>
 
-      <h2 className="mt-2 text-xl font-semibold leading-snug">
-        Well-stocked, local, and easy to shop.
-      </h2>
+              <h2 className="mt-2 text-xl font-semibold leading-snug">
+                  Well-stocked, local, and easy to shop.
+              </h2>
 
-      <p className="mt-3 text-[15px] text-[#E6EDF5]/90 leading-relaxed">
-        Premium spirits, ice-cold beer &amp; ready-to-drinks, mixers, fresh food, and
-        local favorites — everything you need for the fridge, bar, or a quick stop.
-      </p>
-    </div>
+              <p className="mt-3 text-[15px] text-[#E6EDF5]/90 leading-relaxed">
+                  Premium spirits, ice-cold beer &amp; ready-to-drinks, mixers, fresh food, and
+                  local favorites — everything you need for the fridge, bar, or a quick stop.
+              </p>
+              </div>
 
-    <ul className="mt-5 grid gap-2 text-sm text-[#ffffff]">
-      <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
-        <span>Open daily — see hours below</span>
-      </li>
+              <ul className="mt-5 grid gap-2 text-sm text-[#ffffff]">
+              <li className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
+                  <span>Open daily — see hours below</span>
+              </li>
 
-      <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
-        <span>Corporate orders &amp; custom engravings</span>
-      </li>
+              <li className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
+                  <span>Corporate orders &amp; custom engravings</span>
+              </li>
 
-      <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
-        <span>Fresh food, local products &amp; daily specials</span>
-      </li>
+              <li className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
+                  <span>Fresh food, local products &amp; daily specials</span>
+              </li>
 
-      <li className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
-        <span>EBT accepted (eligible items)</span>
-      </li>
-    </ul>
+              <li className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#ffffff]" />
+                  <span>EBT accepted (eligible items)</span>
+              </li>
+              </ul>
 
-    <p className="mt-4 text-[11px] text-[#ffffff]/70">
-      21+ only. Valid ID required. Please drink responsibly.
-    </p>
-  </div>
-</div>
+              <p className="mt-4 text-[11px] text-[#ffffff]/70">
+              21+ only. Valid ID required. Please drink responsibly.
+              </p>
+          </div>
+          </div>
 
         </div>
       </section>
