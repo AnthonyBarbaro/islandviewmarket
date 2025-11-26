@@ -1,0 +1,61 @@
+name: Deploy to S3 & CloudFront
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      # ⬇️ Pull repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ⬇️ Install Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # ⬇️ Install deps
+      - name: Install dependencies
+        run: npm ci
+
+      # ⬇️ Build static Next.js site (outputs to /out)
+      - name: Build Next.js
+        run: npm run build
+
+      # ⬇️ Configure AWS CLI
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1 # ← change if needed
+
+      # ⬇️ Sync /out to S3 with safe headers
+      - name: Upload to S3
+        run: |
+          aws s3 sync out s3://${{ secrets.AWS_S3_BUCKET }} \
+            --delete \
+            --cache-control "public, max-age=31536000" \
+            --exclude "*.html"
+          
+          # HTML needs no-cache for updates
+          aws s3 sync out s3://${{ secrets.AWS_S3_BUCKET }} \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --exclude "*" \
+            --include "*.html"
+
+      # # ⬇️ Invalidate CloudFront Cache
+      # - name: Create CloudFront invalidation
+      #   run: |
+      #     aws cloudfront create-invalidation \
+      #       --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID }} \
+      #       --paths "/*"
