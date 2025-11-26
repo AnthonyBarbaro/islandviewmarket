@@ -82,19 +82,17 @@ export default function Services() {
   };
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+  
     const el = scrollerRef.current;
     if (!el) return;
-
-    const reduced =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const desktopMQ =
-      typeof window !== "undefined" &&
-      window.matchMedia("(min-width: 768px)");
-
+  
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktopMQ = window.matchMedia("(min-width: 768px)");
+  
     // center the first slide on mount
     el.scrollTo({ left: getSlideLeft(0), behavior: "auto" });
-
+  
     const onScroll = () => {
       const left = el.scrollLeft;
       let nearest = 0;
@@ -112,11 +110,13 @@ export default function Services() {
       setIndex(nearest);
       indexRef.current = nearest;
     };
+  
     el.addEventListener("scroll", onScroll, { passive: true });
-
+  
     let timer: ReturnType<typeof setInterval> | null = null;
+  
     const start = () => {
-      if (reduced || desktopMQ.matches) return;
+      if (reduced.matches || desktopMQ.matches) return;
       stop();
       timer = setInterval(() => {
         if (interactingRef.current) return;
@@ -126,24 +126,26 @@ export default function Services() {
         indexRef.current = next;
       }, AUTOPLAY_MS);
     };
+  
     const stop = () => {
       if (timer) clearInterval(timer);
       timer = null;
     };
-
+  
     start();
+  
     const onMQ = () => {
       stop();
       start();
     };
-    desktopMQ.addEventListener?.("change", onMQ);
-
+  
+    desktopMQ.addEventListener("change", onMQ);
+  
     return () => {
       stop();
       el.removeEventListener("scroll", onScroll);
-      desktopMQ.removeEventListener?.("change", onMQ);
+      desktopMQ.removeEventListener("change", onMQ);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length]);
 
   const goTo = (i: number) => {
