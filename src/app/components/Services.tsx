@@ -266,28 +266,7 @@ export default function Services() {
             ))}
           </ul>
 
-          {/* arrows – match Brands behavior */}
-          {index > 0 && (
-            <button
-              type="button"
-              onClick={prev}
-              aria-label="Previous service"
-              className="absolute left-1 top-1/2 -translate-y-1/2 rounded-full bg-black text-white px-3 py-1.5 shadow"
-            >
-              ‹
-            </button>
-          )}
-          {index < items.length - 1 && (
-            <button
-              type="button"
-              onClick={next}
-              aria-label="Next service"
-              className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full bg-black text-white px-3 py-1.5 shadow"
-            >
-              ›
-            </button>
-          )}
-
+         
           {/* dots */}
           <div className="mt-3 flex justify-center gap-2">
             {items.map((_, i) => (
