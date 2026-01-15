@@ -11,7 +11,7 @@ const STRIPS = [
 ];
 
 export const metadata = {
-  metadataBase: new URL("https://islandviewmarket.com"),
+  metadataBase: new URL("https://www.islandviewmarketsd.com"),
 
   title: {
     default: "Island View Market & Liquor",
@@ -37,13 +37,13 @@ export const metadata = {
   ],
 
   alternates: {
-    canonical: "https://islandviewmarket.com",
+    canonical: "https://www.islandviewmarketsd.com",
   },
 
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://islandviewmarket.com",
+    url: "https://www.islandviewmarketsd.com",
     siteName: "Island View Market & Liquor",
     title: "Island View Market & Liquor",
     description:
@@ -94,9 +94,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LiquorStore",
-              "@id": "https://islandviewmarket.com/#store",
+              "@id": "https://www.islandviewmarketsd.com/#store",
               name: "Island View Market & Liquor",
-              image: "https://islandviewmarket.com/logo1.jpeg",
+              image: "https://wwww.islandviewmarketsd.com/logo1.jpeg",
               telephone: "+1-619-262-3251",
               address: {
                 "@type": "PostalAddress",
@@ -116,7 +116,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 { "@type": "OpeningHoursSpecification", dayOfWeek: "Sunday", opens: "08:00", closes: "00:00" },
               ],
               priceRange: "$$",
-              url: "https://islandviewmarket.com",
+              url: "https://www.islandviewmarketsd.com",
               servesCuisine: ["Snacks", "Deli", "Convenience"],
               sameAs: [
                 "https://maps.google.com/?cid=3393761236421816759",
@@ -132,11 +132,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              url: "https://islandviewmarket.com",
+              url: "https://www.islandviewmarketsd.com",
               name: "Island View Market & Liquor",
               potentialAction: {
                 "@type": "SearchAction",
-                target: "https://islandviewmarket.com/?s={search_term_string}",
+                target: "https://www.islandviewmarketsd.com/?s={search_term_string}",
                 "query-input": "required name=search_term_string",
               },
             }),
