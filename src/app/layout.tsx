@@ -14,12 +14,12 @@ export const metadata = {
   metadataBase: new URL("https://www.islandviewmarketsd.com"),
 
   title: {
-    default: "Island View Market & Liquor",
+    default: "Island View Market & Liquor | San Diego",
     template: "%s | Island View Market & Liquor",
   },
 
   description:
-    "Island View Market & Liquor — your neighborhood stop for premium spirits, ice-cold beer, groceries, fresh food, and daily essentials. Serving San Diego for 40+ years.",
+    "Island View Market & Liquor — premium spirits, ice-cold beer, groceries, fresh food, and essentials. Serving San Diego for 40+ years.",
 
   keywords: [
     "Island View Market",

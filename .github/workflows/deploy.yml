@@ -53,9 +53,9 @@ jobs:
             --exclude "*" \
             --include "*.html"
 
-      # # ⬇️ Invalidate CloudFront Cache
-      # - name: Create CloudFront invalidation
-      #   run: |
-      #     aws cloudfront create-invalidation \
-      #       --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID }} \
-      #       --paths "/*"
+      # ⬇️ Invalidate CloudFront Cache
+      - name: Create CloudFront invalidation
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID }} \
+            --paths "/*"
